@@ -546,6 +546,8 @@ uint16_t Reader14443AAppProcess(uint8_t *Buffer, uint16_t BitCount) {
             uint16_t rVal = Reader14443A_Select(Buffer, BitCount);
             if (Selected) { // we are done finding the UID
                 char tmpBuf[20];
+                //Debug
+                snprintf_P(Buffer , BitCount, PSTR("Buffer === %d"), *Buffer);
                 BufferToHexString(tmpBuf, 20, CardCharacteristics.UID, CardCharacteristics.UIDSize);
                 CommandLinePendingTaskFinished(COMMAND_INFO_OK_WITH_TEXT_ID, tmpBuf);
                 Selected = false;
