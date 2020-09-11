@@ -8,11 +8,13 @@
 #include "CommandLine.h"
 #include "Settings.h"
 #include "System.h"
+#include "Configuration.h"
+#include "../Application/NFC_Command.h"
 
-#define CHAR_GET_MODE   		'?'     /* <Command>? */
-#define CHAR_SET_MODE   		'='     /* <Command>=<Param> */
-#define CHAR_EXEC_MODE  		'\0'    /* <Command> */
-#define CHAR_EXEC_MODE_PARAM 	' '		/* <Command> <Param> ... <ParamN> */
+#define CHAR_GET_MODE     '?'     /* <Command>? */
+#define CHAR_SET_MODE     '='     /* <Command>=<Param> */
+#define CHAR_EXEC_MODE    '\0'    /* <Command> */
+#define CHAR_EXEC_MODE_PARAM  ' '  /* <Command> <Param> ... <ParamN> */
 
 #define IS_COMMAND_DELIMITER(c) ( \
   ((c) == CHAR_EXEC_MODE) || ((c) == CHAR_GET_MODE) || ((c) == CHAR_SET_MODE) || ((c) == CHAR_EXEC_MODE_PARAM) \
@@ -41,302 +43,302 @@
 
 const PROGMEM CommandEntryType CommandTable[] = {
     {
-        .Command    = COMMAND_VERSION,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_VERSION,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = NO_FUNCTION,
-        .GetFunc    = CommandGetVersion,
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = CommandGetVersion,
     },
     {
-        .Command    = COMMAND_CONFIG,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_CONFIG,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = CommandSetConfig,
-        .GetFunc    = CommandGetConfig
+        .SetFunc = CommandSetConfig,
+        .GetFunc = CommandGetConfig
     },
     {
-        .Command    = COMMAND_UID,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_UID,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = CommandSetUid,
-        .GetFunc    = CommandGetUid
+        .SetFunc = CommandSetUid,
+        .GetFunc = CommandGetUid
     },
     {
-        .Command    = COMMAND_READONLY,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_READONLY,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .GetFunc    = CommandGetReadOnly,
-        .SetFunc    = CommandSetReadOnly
+        .GetFunc = CommandGetReadOnly,
+        .SetFunc = CommandSetReadOnly
 
     },
     {
-        .Command    = COMMAND_UPLOAD,
-        .ExecFunc   = CommandExecUpload,
+        .Command = COMMAND_UPLOAD,
+        .ExecFunc = CommandExecUpload,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = NO_FUNCTION,
-        .GetFunc    = NO_FUNCTION
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
     {
-        .Command    = COMMAND_DOWNLOAD,
-        .ExecFunc   = CommandExecDownload,
+        .Command = COMMAND_DOWNLOAD,
+        .ExecFunc = CommandExecDownload,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = NO_FUNCTION,
-        .GetFunc    = NO_FUNCTION
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
     {
-        .Command    = COMMAND_RESET,
-        .ExecFunc   = CommandExecReset,
+        .Command = COMMAND_RESET,
+        .ExecFunc = CommandExecReset,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = NO_FUNCTION,
-        .GetFunc    = NO_FUNCTION
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
 #ifdef SUPPORT_FIRMWARE_UPGRADE
     {
-        .Command    = COMMAND_UPGRADE,
-        .ExecFunc   = CommandExecUpgrade,
+        .Command = COMMAND_UPGRADE,
+        .ExecFunc = CommandExecUpgrade,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = NO_FUNCTION,
-        .GetFunc    = NO_FUNCTION
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
 #endif
     {
-        .Command    = COMMAND_MEMSIZE,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_MEMSIZE,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = NO_FUNCTION,
-        .GetFunc    = CommandGetMemSize
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = CommandGetMemSize
     },
     {
-        .Command    = COMMAND_UIDSIZE,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_UIDSIZE,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = NO_FUNCTION,
-        .GetFunc    = CommandGetUidSize
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = CommandGetUidSize
     },
     {
-        .Command    = COMMAND_RBUTTON,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_RBUTTON,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = CommandSetRButton,
-        .GetFunc    = CommandGetRButton
+        .SetFunc = CommandSetRButton,
+        .GetFunc = CommandGetRButton
     },
     {
-        .Command    = COMMAND_RBUTTON_LONG,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_RBUTTON_LONG,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = CommandSetRButtonLong,
-        .GetFunc    = CommandGetRButtonLong
+        .SetFunc = CommandSetRButtonLong,
+        .GetFunc = CommandGetRButtonLong
     },
     {
-        .Command    = COMMAND_LBUTTON,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_LBUTTON,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = CommandSetLButton,
-        .GetFunc    = CommandGetLButton
+        .SetFunc = CommandSetLButton,
+        .GetFunc = CommandGetLButton
     },
     {
-        .Command    = COMMAND_LBUTTON_LONG,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_LBUTTON_LONG,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = CommandSetLButtonLong,
-        .GetFunc    = CommandGetLButtonLong
+        .SetFunc = CommandSetLButtonLong,
+        .GetFunc = CommandGetLButtonLong
     },
     {
-        .Command    = COMMAND_LEDGREEN,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_LEDGREEN,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = CommandSetLedGreen,
-        .GetFunc    = CommandGetLedGreen
+        .SetFunc = CommandSetLedGreen,
+        .GetFunc = CommandGetLedGreen
     },
     {
-        .Command    = COMMAND_LEDRED,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_LEDRED,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = CommandSetLedRed,
-        .GetFunc    = CommandGetLedRed
+        .SetFunc = CommandSetLedRed,
+        .GetFunc = CommandGetLedRed
     },
     {
-        .Command    = COMMAND_PIN,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_LOGMODE,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = CommandSetPin,
-        .GetFunc    = CommandGetPin
+        .SetFunc = CommandSetLogMode,
+        .GetFunc = CommandGetLogMode
     },
     {
-        .Command    = COMMAND_LOGMODE,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_LOGMEM,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = CommandSetLogMode,
-        .GetFunc    = CommandGetLogMode
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = CommandGetLogMem
     },
     {
-        .Command    = COMMAND_LOGMEM,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_LOGDOWNLOAD,
+        .ExecFunc = CommandExecLogDownload,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = NO_FUNCTION,
-        .GetFunc    = CommandGetLogMem
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
     {
-        .Command    = COMMAND_LOGDOWNLOAD,
-        .ExecFunc   = CommandExecLogDownload,
+        .Command = COMMAND_STORELOG,
+        .ExecFunc = CommandExecStoreLog,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = NO_FUNCTION,
-        .GetFunc    = NO_FUNCTION
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
     {
-        .Command    = COMMAND_STORELOG,
-        .ExecFunc   = CommandExecStoreLog,
+        .Command = COMMAND_LOGCLEAR,
+        .ExecFunc = CommandExecLogClear,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = NO_FUNCTION,
-        .GetFunc    = NO_FUNCTION
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
     {
-        .Command    = COMMAND_LOGCLEAR,
-        .ExecFunc   = CommandExecLogClear,
+        .Command = COMMAND_SETTING,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = NO_FUNCTION,
-        .GetFunc    = NO_FUNCTION
+        .SetFunc = CommandSetSetting,
+        .GetFunc = CommandGetSetting
     },
     {
-        .Command	= COMMAND_SETTING,
-        .ExecFunc	= NO_FUNCTION,
+        .Command = COMMAND_CLEAR,
+        .ExecFunc = CommandExecClear,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc	= CommandSetSetting,
-        .GetFunc	= CommandGetSetting
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
     {
-        .Command	= COMMAND_CLEAR,
-        .ExecFunc	= CommandExecClear,
+        .Command = COMMAND_STORE,
+        .ExecFunc = CommandExecStore,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc	= NO_FUNCTION,
-        .GetFunc	= NO_FUNCTION
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
     {
-        .Command	= COMMAND_STORE,
-        .ExecFunc	= CommandExecStore,
+        .Command = COMMAND_RECALL,
+        .ExecFunc = CommandExecRecall,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc	= NO_FUNCTION,
-        .GetFunc	= NO_FUNCTION
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
     {
-        .Command	= COMMAND_RECALL,
-        .ExecFunc	= CommandExecRecall,
+        .Command = COMMAND_CHARGING,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc	= NO_FUNCTION,
-        .GetFunc	= NO_FUNCTION
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = CommandGetCharging
     },
     {
-        .Command    = COMMAND_CHARGING,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_HELP,
+        .ExecFunc = CommandExecHelp,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = NO_FUNCTION,
-        .GetFunc    = CommandGetCharging
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
     {
-        .Command    = COMMAND_HELP,
-        .ExecFunc   = CommandExecHelp,
+        .Command = COMMAND_RSSI,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = NO_FUNCTION,
-        .GetFunc    = NO_FUNCTION
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = CommandGetRssi
     },
     {
-        .Command	= COMMAND_RSSI,
-        .ExecFunc 	= NO_FUNCTION,
+        .Command = COMMAND_SYSTICK,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc 	= NO_FUNCTION,
-        .GetFunc 	= CommandGetRssi
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = CommandGetSysTick
     },
     {
-        .Command	= COMMAND_SYSTICK,
-        .ExecFunc 	= NO_FUNCTION,
-        .ExecParamFunc = NO_FUNCTION,
-        .SetFunc 	= NO_FUNCTION,
-        .GetFunc 	= CommandGetSysTick
-    },
-    {
-        .Command	= COMMAND_SEND_RAW,
-        .ExecFunc 	= NO_FUNCTION,
+        .Command = COMMAND_SEND_RAW,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = CommandExecParamSendRaw,
-        .SetFunc 	= NO_FUNCTION,
-        .GetFunc 	= NO_FUNCTION
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
     {
-        .Command	= COMMAND_SEND,
-        .ExecFunc 	= NO_FUNCTION,
+        .Command = COMMAND_SEND,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = CommandExecParamSend,
-        .SetFunc 	= NO_FUNCTION,
-        .GetFunc 	= NO_FUNCTION
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
     {
-        .Command	= COMMAND_GETUID,
-        .ExecFunc 	= CommandExecGetUid,
+        .Command = COMMAND_GETUID,
+        .ExecFunc = CommandExecGetUid,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc 	= NO_FUNCTION,
-        .GetFunc 	= NO_FUNCTION
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
     {
-        .Command	= COMMAND_DUMP_MFU,
-        .ExecFunc 	= CommandExecDumpMFU,
+        .Command = COMMAND_DUMP_MFU,
+        .ExecFunc = CommandExecDumpMFU,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc 	= NO_FUNCTION,
-        .GetFunc 	= NO_FUNCTION
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
     {
-        .Command	= COMMAND_CLONE_MFU,
-        .ExecFunc 	= CommandExecCloneMFU,
-        .ExecParamFunc  = NO_FUNCTION,
-        .SetFunc 	= NO_FUNCTION,
-        .GetFunc 	= NO_FUNCTION
-    },
-    {
-        .Command	= COMMAND_IDENTIFY_CARD,
-        .ExecFunc 	= CommandExecIdentifyCard,
+        .Command = COMMAND_CLONE_MFU,
+        .ExecFunc = CommandExecCloneMFU,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc 	= NO_FUNCTION,
-        .GetFunc 	= NO_FUNCTION
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
     {
-        .Command	= COMMAND_TIMEOUT,
-        .ExecFunc 	= NO_FUNCTION,
+        .Command = COMMAND_IDENTIFY_CARD,
+        .ExecFunc = CommandExecIdentifyCard,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc 	= CommandSetTimeout,
-        .GetFunc 	= CommandGetTimeout
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
     {
-        .Command	= COMMAND_THRESHOLD,
-        .ExecFunc 	= NO_FUNCTION,
+        .Command = COMMAND_TIMEOUT,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc 	= CommandSetThreshold,
-        .GetFunc 	= CommandGetThreshold
+        .SetFunc = CommandSetTimeout,
+        .GetFunc = CommandGetTimeout
     },
     {
-        .Command    = COMMAND_AUTOCALIBRATE,
-        .ExecFunc   = CommandExecAutocalibrate,
+        .Command = COMMAND_THRESHOLD,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = NO_FUNCTION,
-        .GetFunc    = NO_FUNCTION
+        .SetFunc = CommandSetThreshold,
+        .GetFunc = CommandGetThreshold
     },
     {
-        .Command    = COMMAND_FIELD,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_AUTOCALIBRATE,
+        .ExecFunc = CommandExecAutocalibrate,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = CommandSetField,
-        .GetFunc    = CommandGetField
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     },
     {
-        .Command        = COMMAND_CLONE,
-        .ExecFunc       = CommandExecClone,
-        .ExecParamFunc  = NO_FUNCTION,
-        .SetFunc        = NO_FUNCTION,
-        .GetFunc        = NO_FUNCTION
+        .Command = COMMAND_FIELD,
+        .ExecFunc = NO_FUNCTION,
+        .ExecParamFunc = NO_FUNCTION,
+        .SetFunc = CommandSetField,
+        .GetFunc = CommandGetField
+    },
+    {
+        .Command = COMMAND_CLONE,
+        .ExecFunc = CommandExecClone,
+        .ExecParamFunc = NO_FUNCTION,
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
+    },
+    {
+        .Command = COMMAND_TEST,
+        .ExecFunc = NO_FUNCTION,
+        .ExecParamFunc = NO_FUNCTION,
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = CommandTest
     },
     {
         /* This has to be last element */
-        .Command    = COMMAND_LIST_END,
-        .ExecFunc   = NO_FUNCTION,
+        .Command = COMMAND_LIST_END,
+        .ExecFunc = NO_FUNCTION,
         .ExecParamFunc = NO_FUNCTION,
-        .SetFunc    = NO_FUNCTION,
-        .GetFunc    = NO_FUNCTION
+        .SetFunc = NO_FUNCTION,
+        .GetFunc = NO_FUNCTION
     }
 };
 
@@ -362,7 +364,8 @@ static const CommandStatusType PROGMEM StatusTable[] = {
 
 static uint16_t BufferIdx;
 
-void (*CommandLinePendingTaskTimeout)(void) = NO_FUNCTION;  // gets called on Timeout
+const char *NFCResponse;
+void (*CommandLinePendingTaskTimeout)(void) = NO_FUNCTION; // gets called on Timeout
 static bool TaskPending = false;
 static uint16_t TaskPendingSince;
 
@@ -378,7 +381,7 @@ static const char *GetStatusMessageP(CommandStatusIdType StatusId) {
 }
 
 static CommandStatusIdType CallCommandFunc(
-    const CommandEntryType *CommandEntry, char CommandDelimiter, char *pParam) {
+        const CommandEntryType *CommandEntry, char CommandDelimiter, char *pParam) {
     char *pTerminalBuffer = (char *) TerminalBuffer;
     CommandStatusIdType Status = COMMAND_ERR_INVALID_USAGE_ID;
 
@@ -464,12 +467,19 @@ static void DecodeCommand(void) {
     if (StatusId == TIMEOUT_COMMAND) // it is a timeout command, so we return
         return;
 
+    if (GlobalSettings.ActiveSettingPtr->Configuration == CONFIG_NFC_COMMAND) { //if nfc mode then write status to pages
+        NFCStatusId(GetStatusMessageP(StatusId));
+    }
+
     /* Send command status message */
     TerminalSendStringP(GetStatusMessageP(StatusId));
     TerminalSendStringP(PSTR(STATUS_MESSAGE_TRAILER));
 
     if (CommandFound && (pTerminalBuffer[0] != '\0')) {
         /* Send optional answer */
+        if (GlobalSettings.ActiveSettingPtr->Configuration == CONFIG_NFC_COMMAND) {
+        NFCResponse = pTerminalBuffer; //send the answer to pages
+        }
         TerminalSendString(pTerminalBuffer);
         TerminalSendStringP(PSTR(OPTIONAL_ANSWER_TRAILER));
     }
@@ -508,7 +518,6 @@ bool CommandLineProcessByte(uint8_t Byte) {
     } else {
         /* Ignore other chars */
     }
-
     return true;
 }
 

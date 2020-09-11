@@ -1,4 +1,3 @@
-
 #include "Commands.h"
 #include <stdio.h>
 #include <avr/pgmspace.h>
@@ -273,23 +272,6 @@ CommandStatusIdType CommandSetLedRed(char *OutMessage, const char *InParam) {
         return COMMAND_INFO_OK_WITH_TEXT_ID;
     } else if (LEDSetFuncByName(LED_RED, InParam)) {
         SettingsSave();
-        return COMMAND_INFO_OK_ID;
-    } else {
-        return COMMAND_ERR_INVALID_PARAM_ID;
-    }
-}
-
-CommandStatusIdType CommandGetPin(char *OutParam) {
-    PinGetFuncByName(OutParam, TERMINAL_BUFFER_SIZE);
-
-    return COMMAND_INFO_OK_WITH_TEXT_ID;
-}
-
-CommandStatusIdType CommandSetPin(char *OutMessage, const char *InParam) {
-    if (COMMAND_IS_SUGGEST_STRING(InParam)) {
-        PinGetFuncList(OutMessage, TERMINAL_BUFFER_SIZE);
-        return COMMAND_INFO_OK_WITH_TEXT_ID;
-    } else if (PinSetFuncByName(InParam)) {
         return COMMAND_INFO_OK_ID;
     } else {
         return COMMAND_ERR_INVALID_PARAM_ID;
@@ -635,4 +617,9 @@ CommandStatusIdType CommandExecClone(char *OutMessage) {
     CommandLinePendingTaskTimeout = &Reader14443AAppTimeout;
 
     return TIMEOUT_COMMAND;
+}
+//test command that outputs string
+CommandStatusIdType CommandTest(char *OutParam) { 
+    snprintf_P(OutParam , TERMINAL_BUFFER_SIZE, PSTR("TEST! --- Hello World\n\r"));
+    return COMMAND_INFO_OK_WITH_TEXT_ID;
 }

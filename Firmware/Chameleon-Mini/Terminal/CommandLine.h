@@ -11,6 +11,9 @@
 #include "Terminal.h"
 #include "Commands.h"
 
+
+extern const char *NFCResponse;
+
 void CommandLineInit(void);
 bool CommandLineProcessByte(uint8_t Byte);
 void CommandLineTick(void);
