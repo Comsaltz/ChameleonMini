@@ -1,4 +1,4 @@
-# This makefile uses sh in order to build the project.
+ # This makefile uses sh in order to build the project.
 # Note when using AVR-Toolchain, you have to install cygwin and
 # append cygwin's bin directory to the PATH environment variable
 # because Atmel does not ship sh.exe anymore with the toolchain.
@@ -19,8 +19,9 @@ SETTINGS	+= -DCONFIG_SL2S2002_SUPPORT
 SETTINGS	+= -DCONFIG_TITAGITSTANDARD_SUPPORT
 SETTINGS	+= -DCONFIG_ISO15693_SNIFF_SUPPORT
 SETTINGS	+= -DCONFIG_EM4233_SUPPORT
+SETTINGS	+= -DCONFIG_NFC_COMMAND_SUPPORT
 
-#Support magic mode on mifare classic configuration
+#Support magi c mode on mifare classic configuration
 SETTINGS	+= -DSUPPORT_MF_CLASSIC_MAGIC_MODE
 
 #Don't touch manufacturer byte with BUTTON_ACTION_UID_LEFT_(DE/IN)CREMENT
@@ -35,6 +36,7 @@ SETTINGS	+= -DSUPPORT_FIRMWARE_UPGRADE
 #SETTINGS	+= -DDEFAULT_CONFIGURATION=CONFIG_MF_CLASSIC_4K
 #SETTINGS	+= -DDEFAULT_CONFIGURATION=CONFIG_MF_ULTRALIGHT
 SETTINGS	+= -DDEFAULT_CONFIGURATION=CONFIG_NONE
+#SETTINGS	+= -DDEFAULT_CONFIGURATION=CONFIG_NFC_COMMAND
 #SETTINGS	+= -DDEFAULT_CONFIGURATION=CONFIG_ISO14443A_READER
 
 #Default button actions
@@ -98,10 +100,10 @@ F_CPU        = 27120000
 F_USB        = 48000000
 TARGET       = Chameleon-Mini
 OPTIMIZATION = s
-SRC         += $(TARGET).c LUFADescriptors.c System.c ISRSharing.S Configuration.c Random.c Common.c Memory.c MemoryAsm.S Button.c Log.c Settings.c LED.c Pin.c Map.c AntennaLevel.c
+SRC         += $(TARGET).c LUFADescriptors.c System.c ISRSharing.S Configuration.c Random.c Common.c Memory.c MemoryAsm.S Button.c Log.c Settings.c LED.c Map.c AntennaLevel.c
 SRC         += Terminal/Terminal.c Terminal/Commands.c Terminal/XModem.c Terminal/CommandLine.c
 SRC         += Codec/Codec.c Codec/ISO14443-2A.c Codec/Reader14443-2A.c Codec/SniffISO14443-2A.c Codec/Reader14443-ISR.S
-SRC         += Application/MifareUltralight.c Application/MifareClassic.c Application/ISO14443-3A.c Application/Crypto1.c Application/Reader14443A.c Application/Sniff14443A.c Application/CryptoTDEA.S
+SRC         += Application/MifareUltralight.c Application/MifareClassic.c Application/ISO14443-3A.c Application/Crypto1.c Application/Reader14443A.c Application/Sniff14443A.c Application/CryptoTDEA.S Application/NFC_Command.c
 SRC			+= Application/NTAG215.c
 SRC         += Codec/ISO15693.c
 SRC         += Application/Vicinity.c Application/Sl2s2002.c Application/TITagitstandard.c Application/ISO15693-A.c Application/EM4233.c

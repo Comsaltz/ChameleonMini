@@ -59,6 +59,9 @@ static const MapEntryType PROGMEM ConfigurationMap[] = {
 #ifdef CONFIG_EM4233_SUPPORT
     { .Id = CONFIG_EM4233,	.Text = "EM4233" },
 #endif
+#ifdef CONFIG_NFC_COMMAND_SUPPORT
+    { .Id = CONFIG_NFC_COMMAND, .Text = "NFC_COMMAND" },
+#endif
 };
 
 /* Include all Codecs and Applications */
@@ -107,7 +110,7 @@ static const PROGMEM ConfigurationType ConfigurationTable[] = {
         .ApplicationGetUidFunc = MifareUltralightGetUid,
         .ApplicationSetUidFunc = MifareUltralightSetUid,
         .UidSize = MIFARE_ULTRALIGHT_UID_SIZE,
-        .MemorySize = MIFARE_ULTRALIGHT_MEM_SIZE,
+        .MemorySize = NFC_COMMAND_MEM_SIZE,
         .ReadOnly = false,
         .TagFamily = TAG_FAMILY_ISO14443A
     },
@@ -391,6 +394,24 @@ static const PROGMEM ConfigurationType ConfigurationTable[] = {
         .UidSize = NTAG215_UID_SIZE,
         .MemorySize = NTAG215_MEM_SIZE,
         .ReadOnly = false,
+    },
+#endif
+#ifdef CONFIG_NFC_COMMAND_SUPPORT
+    [CONFIG_NFC_COMMAND] = {
+        .CodecInitFunc = ISO14443ACodecInit,
+        .CodecDeInitFunc = ISO14443ACodecDeInit,
+        .CodecTaskFunc = ISO14443ACodecTask,
+        .ApplicationInitFunc = NFCCommandAppInit,
+        .ApplicationResetFunc = NFCCommandAppReset,
+        .ApplicationTaskFunc = NFCCommandAppTask,
+        .ApplicationTickFunc = ApplicationTickDummy,
+        .ApplicationProcessFunc = NFCCommandAppProcess,
+        .ApplicationGetUidFunc = ApplicationGetUidDummy,
+        .ApplicationSetUidFunc = ApplicationSetUidDummy,
+        .UidSize = MIFARE_ULTRALIGHT_UID_SIZE,
+        .MemorySize = NFC_COMMAND_MEM_SIZE,
+        .ReadOnly = false,
+        .TagFamily = TAG_FAMILY_ISO14443A
     },
 #endif
 };
